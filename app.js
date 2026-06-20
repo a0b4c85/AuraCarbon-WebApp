@@ -37,15 +37,29 @@ const HABITS = [
   { id: 'local_produce', name: 'Buy Local Produce', impact: 1.1, category: 'diet', icon: 'fa-shop' }
 ];
 
-// DOM elements
-const welcomeTitle = document.getElementById('welcome-title');
-const openCalcBtn = document.getElementById('open-calc-btn');
-const closeCalcBtn = document.getElementById('close-calc-btn');
-const calcModal = document.getElementById('calc-modal');
-const prevStepBtn = document.getElementById('prev-step-btn');
-const nextStepBtn = document.getElementById('next-step-btn');
-const calculatorForm = document.getElementById('calculator-form');
-const resetHabitsBtn = document.getElementById('reset-habits-btn');
+// Check if running in browser
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+// DOM elements (conditional for browser environment)
+let welcomeTitle = null;
+let openCalcBtn = null;
+let closeCalcBtn = null;
+let calcModal = null;
+let prevStepBtn = null;
+let nextStepBtn = null;
+let calculatorForm = null;
+let resetHabitsBtn = null;
+
+if (isBrowser) {
+  welcomeTitle = document.getElementById('welcome-title');
+  openCalcBtn = document.getElementById('open-calc-btn');
+  closeCalcBtn = document.getElementById('close-calc-btn');
+  calcModal = document.getElementById('calc-modal');
+  prevStepBtn = document.getElementById('prev-step-btn');
+  nextStepBtn = document.getElementById('next-step-btn');
+  calculatorForm = document.getElementById('calculator-form');
+  resetHabitsBtn = document.getElementById('reset-habits-btn');
+}
 
 // Sliders mapping
 const sliders = [
@@ -55,22 +69,26 @@ const sliders = [
 ];
 
 // Initialize Sliders
-sliders.forEach(slider => {
-  const inputEl = document.getElementById(slider.inputId);
-  const valEl = document.getElementById(slider.valId);
-  if (inputEl && valEl) {
-    inputEl.addEventListener('input', (e) => {
-      const val = e.target.value;
-      valEl.textContent = (slider.prefix || '') + val + (slider.suffix || '');
-    });
-  }
-});
+if (isBrowser) {
+  sliders.forEach(slider => {
+    const inputEl = document.getElementById(slider.inputId);
+    const valEl = document.getElementById(slider.valId);
+    if (inputEl && valEl) {
+      inputEl.addEventListener('input', (e) => {
+        const val = e.target.value;
+        valEl.textContent = (slider.prefix || '') + val + (slider.suffix || '');
+      });
+    }
+  });
+}
 
 // Modal step controls
 let currentStep = 1;
 const totalSteps = 4;
 
 function updateModalStep() {
+  if (!isBrowser) return;
+
   document.querySelectorAll('.calculator-step').forEach(step => {
     step.classList.remove('active');
   });
@@ -86,72 +104,90 @@ function updateModalStep() {
   });
 
   if (currentStep === 1) {
-    prevStepBtn.style.visibility = 'hidden';
+    if (prevStepBtn) prevStepBtn.style.visibility = 'hidden';
   } else {
-    prevStepBtn.style.visibility = 'visible';
+    if (prevStepBtn) prevStepBtn.style.visibility = 'visible';
   }
 
   if (currentStep === totalSteps) {
-    nextStepBtn.textContent = 'Calculate';
+    if (nextStepBtn) nextStepBtn.textContent = 'Calculate';
   } else {
-    nextStepBtn.textContent = 'Next';
+    if (nextStepBtn) nextStepBtn.textContent = 'Next';
   }
 }
 
-nextStepBtn.addEventListener('click', () => {
-  if (currentStep < totalSteps) {
-    currentStep++;
-    updateModalStep();
-  } else {
-    // Submit form
-    calculateFootprintFromForm();
-    closeCalculator();
+if (isBrowser) {
+  if (nextStepBtn) {
+    nextStepBtn.addEventListener('click', () => {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateModalStep();
+      } else {
+        // Submit form
+        calculateFootprintFromForm();
+        closeCalculator();
+      }
+    });
   }
-});
 
-prevStepBtn.addEventListener('click', () => {
-  if (currentStep > 1) {
-    currentStep--;
-    updateModalStep();
+  if (prevStepBtn) {
+    prevStepBtn.addEventListener('click', () => {
+      if (currentStep > 1) {
+        currentStep--;
+        updateModalStep();
+      }
+    });
   }
-});
 
-// Modal Open/Close
-openCalcBtn.addEventListener('click', () => {
-  currentStep = 1;
-  updateModalStep();
-  // Populate form with current state values
-  syncStateToForm();
-  calcModal.classList.add('active');
-});
+  if (openCalcBtn) {
+    openCalcBtn.addEventListener('click', () => {
+      currentStep = 1;
+      updateModalStep();
+      // Populate form with current state values
+      syncStateToForm();
+      if (calcModal) calcModal.classList.add('active');
+    });
+  }
 
-closeCalcBtn.addEventListener('click', closeCalculator);
+  if (closeCalcBtn) {
+    closeCalcBtn.addEventListener('click', closeCalculator);
+  }
+}
 
 function closeCalculator() {
-  calcModal.classList.remove('active');
+  if (isBrowser && calcModal) {
+    calcModal.classList.remove('active');
+  }
 }
 
 // Navigation Tab Swapping
-const navLinks = document.querySelectorAll('.nav-link');
-navLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const tabName = link.getAttribute('data-tab');
-    
-    // Toggle active nav link
-    navLinks.forEach(l => l.classList.remove('active'));
-    link.classList.add('active');
+if (isBrowser) {
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tabName = link.getAttribute('data-tab');
+      
+      // Toggle active nav link
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
 
-    // Toggle active tab content
-    document.querySelectorAll('.tab-content').forEach(content => {
-      content.classList.remove('active');
+      // Toggle active tab content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      const targetTab = document.getElementById(`${tabName}-tab`);
+      if (targetTab) targetTab.classList.add('active');
     });
-    document.getElementById(`${tabName}-tab`).classList.add('active');
   });
-});
+}
 
 // Load state from local storage or initialize first time
 function loadState() {
+  if (!isBrowser) {
+    runCalculations();
+    return;
+  }
   const saved = localStorage.getItem('auracarbon_state');
   if (saved) {
     state = JSON.parse(saved);
@@ -404,12 +440,66 @@ function generateInsights() {
   insights.forEach(ins => {
     const div = document.createElement('div');
     div.className = `insight-card ${ins.type === 'warning' ? 'warning' : ''}`;
-    div.innerHTML = `
-      <h4 class="font-outfit">${ins.title}</h4>
-      <p>${ins.text}</p>
-    `;
+    
+    const h4 = document.createElement('h4');
+    h4.className = 'font-outfit';
+    h4.textContent = ins.title;
+    
+    const p = document.createElement('p');
+    p.textContent = ins.text;
+    
+    div.appendChild(h4);
+    div.appendChild(p);
     insightsContainer.appendChild(div);
   });
+}
+
+function createHabitElement(habit, isChecked) {
+  const item = document.createElement('div');
+  item.className = 'habit-item';
+
+  const info = document.createElement('div');
+  info.className = 'habit-info';
+
+  const iconDiv = document.createElement('div');
+  iconDiv.className = 'habit-icon';
+  const icon = document.createElement('i');
+  icon.className = `fa-solid ${habit.icon}`;
+  iconDiv.appendChild(icon);
+
+  const textDiv = document.createElement('div');
+  const nameDiv = document.createElement('div');
+  nameDiv.className = 'habit-name';
+  nameDiv.textContent = habit.name;
+
+  const impactDiv = document.createElement('div');
+  impactDiv.className = 'habit-impact';
+  impactDiv.textContent = `-${habit.impact} kg CO₂e`;
+
+  textDiv.appendChild(nameDiv);
+  textDiv.appendChild(impactDiv);
+  info.appendChild(iconDiv);
+  info.appendChild(textDiv);
+
+  const checkboxWrapper = document.createElement('div');
+  checkboxWrapper.className = 'habit-checkbox-wrapper';
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'habit-checkbox';
+  checkbox.setAttribute('data-id', habit.id);
+  if (isChecked) checkbox.checked = true;
+
+  const checkmark = document.createElement('div');
+  checkmark.className = 'checkmark';
+
+  checkboxWrapper.appendChild(checkbox);
+  checkboxWrapper.appendChild(checkmark);
+
+  item.appendChild(info);
+  item.appendChild(checkboxWrapper);
+
+  return item;
 }
 
 // Render habits dynamically
@@ -417,39 +507,22 @@ function renderHabits() {
   const quickList = document.getElementById('quick-habit-list');
   const fullList = document.getElementById('full-habit-list');
   
-  quickList.innerHTML = '';
-  fullList.innerHTML = '';
+  if (quickList) quickList.innerHTML = '';
+  if (fullList) fullList.innerHTML = '';
 
   HABITS.forEach(habit => {
     const isChecked = state.completedHabits.includes(habit.id);
-    const html = `
-      <div class="habit-item">
-        <div class="habit-info">
-          <div class="habit-icon">
-            <i class="fa-solid ${habit.icon}"></i>
-          </div>
-          <div>
-            <div class="habit-name">${habit.name}</div>
-            <div class="habit-impact">-${habit.impact} kg CO₂e</div>
-          </div>
-        </div>
-        <div class="habit-checkbox-wrapper">
-          <input type="checkbox" class="habit-checkbox" data-id="${habit.id}" ${isChecked ? 'checked' : ''}>
-          <div class="checkmark"></div>
-        </div>
-      </div>
-    `;
-
+    
     // Append to full list tab
-    const fullItemWrapper = document.createElement('div');
-    fullItemWrapper.innerHTML = html;
-    fullList.appendChild(fullItemWrapper.firstElementChild);
+    if (fullList) {
+      const fullItem = createHabitElement(habit, isChecked);
+      fullList.appendChild(fullItem);
+    }
 
     // Append to dashboard quick list (top 3 habits)
-    if (HABITS.indexOf(habit) < 3) {
-      const quickItemWrapper = document.createElement('div');
-      quickItemWrapper.innerHTML = html;
-      quickList.appendChild(quickItemWrapper.firstElementChild);
+    if (quickList && HABITS.indexOf(habit) < 3) {
+      const quickItem = createHabitElement(habit, isChecked);
+      quickList.appendChild(quickItem);
     }
   });
 
@@ -552,14 +625,17 @@ function updateUI() {
 }
 
 // Reset checklists handler
-resetHabitsBtn.addEventListener('click', () => {
-  state.completedHabits = [];
-  saveState();
-  updateUI();
-});
+if (isBrowser && resetHabitsBtn) {
+  resetHabitsBtn.addEventListener('click', () => {
+    state.completedHabits = [];
+    saveState();
+    updateUI();
+  });
+}
 
 // App Bootstrap
 function init() {
+  if (!isBrowser) return;
   loadState();
   updateUI();
   
@@ -567,12 +643,23 @@ function init() {
   const hasOnboarded = localStorage.getItem('auracarbon_onboarded');
   if (!hasOnboarded) {
     setTimeout(() => {
-      openCalcBtn.click();
+      if (openCalcBtn) openCalcBtn.click();
       localStorage.setItem('auracarbon_onboarded', 'true');
     }, 800);
   }
 }
 
 // Start
-document.addEventListener('DOMContentLoaded', init);
-init(); // ensure init executes even if DOM already parsed
+if (isBrowser) {
+  document.addEventListener('DOMContentLoaded', init);
+  init(); // ensure init executes even if DOM already parsed
+}
+
+// Exports for testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    state,
+    HABITS,
+    runCalculations
+  };
+}
