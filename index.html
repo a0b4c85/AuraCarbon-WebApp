@@ -296,29 +296,29 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Do you use clean/renewable energy sources?</label>
+          <div class="form-group" role="radiogroup" aria-labelledby="renew-label">
+            <span id="renew-label" class="form-group-label" style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #fff;">Do you use clean/renewable energy sources?</span>
             <div class="radio-tile-group">
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="renewable" value="none" checked>
-                <div class="radio-tile">
-                  <i class="fa-solid fa-tower-broadcast"></i>
+                <input type="radio" class="radio-tile-input" id="renew-none" name="renewable" value="none" checked>
+                <label class="radio-tile" for="renew-none">
+                  <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
                   <span class="radio-tile-label">Standard Grid</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="renewable" value="partial">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-circle-half-stroke"></i>
+                <input type="radio" class="radio-tile-input" id="renew-partial" name="renewable" value="partial">
+                <label class="radio-tile" for="renew-partial">
+                  <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
                   <span class="radio-tile-label">Partial Green</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="renewable" value="full">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-sun"></i>
+                <input type="radio" class="radio-tile-input" id="renew-full" name="renewable" value="full">
+                <label class="radio-tile" for="renew-full">
+                  <i class="fa-solid fa-sun" aria-hidden="true"></i>
                   <span class="radio-tile-label">100% Solar/Wind</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -326,65 +326,65 @@
 
         <!-- Step 3: Diet & Food -->
         <div class="calculator-step" data-step="3">
-          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-utensils"></i> Diet & Consumption</h3>
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-utensils" aria-hidden="true"></i> Diet & Consumption</h3>
           
-          <div class="form-group">
-            <label>Which best describes your diet?</label>
+          <div class="form-group" role="radiogroup" aria-labelledby="diet-label">
+            <span id="diet-label" class="form-group-label" style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #fff;">Which best describes your diet?</span>
             <div class="radio-tile-group">
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="diet" value="meat_heavy" checked>
-                <div class="radio-tile">
-                  <i class="fa-solid fa-drumstick-bite"></i>
+                <input type="radio" class="radio-tile-input" id="diet-meat" name="diet" value="meat_heavy" checked>
+                <label class="radio-tile" for="diet-meat">
+                  <i class="fa-solid fa-drumstick-bite" aria-hidden="true"></i>
                   <span class="radio-tile-label">Meat Lover</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="diet" value="balanced">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-egg"></i>
+                <input type="radio" class="radio-tile-input" id="diet-balanced" name="diet" value="balanced">
+                <label class="radio-tile" for="diet-balanced">
+                  <i class="fa-solid fa-egg" aria-hidden="true"></i>
                   <span class="radio-tile-label">Balanced / Flexi</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="diet" value="vegetarian">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-cheese"></i>
+                <input type="radio" class="radio-tile-input" id="diet-veg" name="diet" value="vegetarian">
+                <label class="radio-tile" for="diet-veg">
+                  <i class="fa-solid fa-cheese" aria-hidden="true"></i>
                   <span class="radio-tile-label">Vegetarian</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="diet" value="vegan">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-carrot"></i>
+                <input type="radio" class="radio-tile-input" id="diet-vegan" name="diet" value="vegan">
+                <label class="radio-tile" for="diet-vegan">
+                  <i class="fa-solid fa-carrot" aria-hidden="true"></i>
                   <span class="radio-tile-label">Vegan</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="foodWaste">How much food does your household waste?</label>
+          <div class="form-group" role="radiogroup" aria-labelledby="waste-label">
+            <span id="waste-label" class="form-group-label" style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #fff;">How much food does your household waste?</span>
             <div class="radio-tile-group">
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="foodWaste" value="high">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-trash-can"></i>
+                <input type="radio" class="radio-tile-input" id="waste-high" name="foodWaste" value="high">
+                <label class="radio-tile" for="waste-high">
+                  <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                   <span class="radio-tile-label">Significant</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="foodWaste" value="moderate" checked>
-                <div class="radio-tile">
-                  <i class="fa-solid fa-scale-unbalanced-stroke"></i>
+                <input type="radio" class="radio-tile-input" id="waste-moderate" name="foodWaste" value="moderate" checked>
+                <label class="radio-tile" for="waste-moderate">
+                  <i class="fa-solid fa-scale-unbalanced-stroke" aria-hidden="true"></i>
                   <span class="radio-tile-label">Average</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="foodWaste" value="minimal">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-circle-check"></i>
+                <input type="radio" class="radio-tile-input" id="waste-minimal" name="foodWaste" value="minimal">
+                <label class="radio-tile" for="waste-minimal">
+                  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
                   <span class="radio-tile-label">Almost None</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
@@ -392,51 +392,51 @@
 
         <!-- Step 4: Spending & Waste -->
         <div class="calculator-step" data-step="4">
-          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-bag-shopping"></i> Shopping & Habits</h3>
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Shopping & Habits</h3>
           
-          <div class="form-group">
-            <label for="shopping">Monthly shopping on new products (clothes, gadgets, decor):</label>
+          <div class="form-group" role="radiogroup" aria-labelledby="shopping-label">
+            <span id="shopping-label" class="form-group-label" style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #fff;">Monthly shopping on new products (clothes, gadgets, decor):</span>
             <div class="radio-tile-group">
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="shopping" value="high">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-cart-shopping"></i>
+                <input type="radio" class="radio-tile-input" id="shopping-high" name="shopping" value="high">
+                <label class="radio-tile" for="shopping-high">
+                  <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
                   <span class="radio-tile-label">High spender</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="shopping" value="moderate" checked>
-                <div class="radio-tile">
-                  <i class="fa-solid fa-bag-shopping"></i>
+                <input type="radio" class="radio-tile-input" id="shopping-moderate" name="shopping" value="moderate" checked>
+                <label class="radio-tile" for="shopping-moderate">
+                  <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
                   <span class="radio-tile-label">Average</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="shopping" value="minimal">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-tag"></i>
+                <input type="radio" class="radio-tile-input" id="shopping-minimal" name="shopping" value="minimal">
+                <label class="radio-tile" for="shopping-minimal">
+                  <i class="fa-solid fa-tag" aria-hidden="true"></i>
                   <span class="radio-tile-label">Minimalist</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Do you actively recycle paper, plastic, and glass?</label>
+          <div class="form-group" role="radiogroup" aria-labelledby="recycle-label">
+            <span id="recycle-label" class="form-group-label" style="display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: #fff;">Do you actively recycle paper, plastic, and glass?</span>
             <div class="radio-tile-group">
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="recycle" value="no">
-                <div class="radio-tile">
-                  <i class="fa-solid fa-xmark"></i>
+                <input type="radio" class="radio-tile-input" id="recycle-no" name="recycle" value="no">
+                <label class="radio-tile" for="recycle-no">
+                  <i class="fa-solid fa-xmark" aria-hidden="true"></i>
                   <span class="radio-tile-label">No / Rarely</span>
-                </div>
+                </label>
               </div>
               <div class="radio-tile-wrapper">
-                <input type="radio" class="radio-tile-input" name="recycle" value="yes" checked>
-                <div class="radio-tile">
-                  <i class="fa-solid fa-check"></i>
+                <input type="radio" class="radio-tile-input" id="recycle-yes" name="recycle" value="yes" checked>
+                <label class="radio-tile" for="recycle-yes">
+                  <i class="fa-solid fa-check" aria-hidden="true"></i>
                   <span class="radio-tile-label">Regularly</span>
-                </div>
+                </label>
               </div>
             </div>
           </div>
