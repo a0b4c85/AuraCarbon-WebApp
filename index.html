@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraCarbon - Understand, Track & Reduce Your Carbon Footprint</title>
+  <meta name="description" content="Calculate, track and reduce your carbon footprint with personalized daily habits, visual analytics, and insights.">
+  <link rel="stylesheet" href="style.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside>
+      <div>
+        <div class="logo-container">
+          <div class="logo-icon">🍃</div>
+          <div class="logo-text">AuraCarbon</div>
+        </div>
+        
+        <ul class="nav-links">
+          <li class="nav-item">
+            <a class="nav-link active" data-tab="dashboard">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="habits">
+              <i class="fa-solid fa-leaf"></i>
+              <span>Habit Tracker</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-tab="analytics">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Analytics</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <p>AuraCarbon v1.0.0</p>
+        <p style="font-size: 0.7rem; margin-top: 0.25rem;">Live consciously.</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <!-- Top header bar -->
+      <header>
+        <div class="header-title">
+          <h1 id="welcome-title">Welcome Back!</h1>
+          <p id="welcome-sub">Let's continue tracking your eco journey today.</p>
+        </div>
+        <button class="btn" id="open-calc-btn">
+          <i class="fa-solid fa-calculator"></i> Recalculate Footprint
+        </button>
+      </header>
+
+      <!-- Tab Content: Dashboard -->
+      <div id="dashboard-tab" class="tab-content active">
+        <div class="dashboard-grid">
+          
+          <!-- Left Main Panel -->
+          <div class="left-panel">
+            
+            <!-- KPI row summary -->
+            <div class="kpi-row">
+              <div class="glass-card kpi-card">
+                <p class="kpi-label">Annual Footprint <i class="fa-solid fa-circle-info info-tooltip-trigger" title="CO₂e stands for Carbon Dioxide Equivalent, standardizing the greenhouse gas impacts."></i></p>
+                <p class="kpi-val"><span id="kpi-footprint">8.4</span> <span>Tons</span></p>
+                <div class="kpi-trend trend-down">
+                  <i class="fa-solid fa-arrow-down"></i> <span id="kpi-footprint-diff">12%</span> vs average
+                </div>
+              </div>
+              
+              <div class="glass-card kpi-card">
+                <p class="kpi-label">This Month's Savings</p>
+                <p class="kpi-val"><span id="kpi-savings">42.5</span> <span>kg</span></p>
+                <div class="kpi-trend trend-down">
+                  <i class="fa-solid fa-leaf"></i> Habit streaks active
+                </div>
+              </div>
+              
+              <div class="glass-card kpi-card">
+                <p class="kpi-label">Eco Level</p>
+                <p class="kpi-val"><span id="kpi-score">78</span><span>/100</span></p>
+                <div id="eco-badge-container">
+                  <span class="eco-badge badge-sapling" id="kpi-level-badge">Eco Sapling</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Beginner Explainer & Equivalents -->
+            <div class="glass-card equivalents-card">
+              <h3 class="card-title"><i class="fa-solid fa-earth-americas"></i> Real-world Analogy</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+                Tons of gas can be hard to visualize! Your annual carbon footprint is equivalent to:
+              </p>
+              <div class="analogy-grid">
+                <div class="analogy-item">
+                  <div class="analogy-icon"><i class="fa-solid fa-tree"></i></div>
+                  <div>
+                    <div class="analogy-val" id="analogy-trees">--</div>
+                    <div class="analogy-label">Tree seedlings grown for 10 years</div>
+                  </div>
+                </div>
+                <div class="analogy-item">
+                  <div class="analogy-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                  <div>
+                    <div class="analogy-val" id="analogy-phones">--</div>
+                    <div class="analogy-label">Smartphones charged</div>
+                  </div>
+                </div>
+                <div class="analogy-item">
+                  <div class="analogy-icon"><i class="fa-solid fa-road"></i></div>
+                  <div>
+                    <div class="analogy-val" id="analogy-miles">--</div>
+                    <div class="analogy-label">Miles driven in a petrol car</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fa-solid fa-chart-simple"></i> Emissions Breakdown</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">Your customized carbon footprint segment analysis.</p>
+              <div class="chart-container">
+                <canvas id="emissionsChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Daily Habit Quick Tracker -->
+            <div class="glass-card">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 class="card-title" style="margin-bottom: 0;"><i class="fa-solid fa-calendar-check"></i> Today's Green Habits</h3>
+                <button class="habit-reset-btn" id="reset-habits-btn">Reset Checklist</button>
+              </div>
+              <div class="habit-list" id="quick-habit-list">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Sidebar Panel -->
+          <div class="right-panel">
+            
+            <!-- Goal & Level progress -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fa-solid fa-bullseye"></i> Reduction Target</h3>
+              <div class="progress-list">
+                <div>
+                  <div class="progress-item-label">
+                    <span>Yearly reduction target (15%)</span>
+                    <span id="target-progress-pct">45%</span>
+                  </div>
+                  <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="target-progress-bar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Insights -->
+            <div class="glass-card">
+              <h3 class="card-title"><i class="fa-solid fa-lightbulb"></i> Eco Insights</h3>
+              <div class="insight-list" id="insight-list-container">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Habits -->
+      <div id="habits-tab" class="tab-content">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <div class="glass-card" style="margin-bottom: 2rem;">
+            <h2 class="card-title"><i class="fa-solid fa-leaf"></i> Every Action Counts</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+              Check the positive actions you performed today to reduce your carbon footprint. Each action subtracts CO2 equivalents from your track record.
+            </p>
+            <div class="habit-list" id="full-habit-list">
+              <!-- Injected via Javascript -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Analytics -->
+      <div id="analytics-tab" class="tab-content">
+        <div style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem;">
+          <div class="glass-card">
+            <h2 class="card-title"><i class="fa-solid fa-circle-nodes"></i> Deep Analytics</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Visualize your weekly and monthly savings progression vs target goals.</p>
+            <div style="position: relative; height: 350px;">
+              <canvas id="historicalChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Onboarding & Footprint Calculator Modal -->
+  <div class="modal-overlay" id="calc-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="close-calc-btn">&times;</button>
+      <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;" class="font-outfit">Calculate Your Footprint</h2>
+      <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">Answer a few simple questions about your lifestyle to get an estimate of your annual carbon footprint.</p>
+
+      <div class="step-indicator">
+        <div class="indicator-dot active" data-step="1"></div>
+        <div class="indicator-dot" data-step="2"></div>
+        <div class="indicator-dot" data-step="3"></div>
+        <div class="indicator-dot" data-step="4"></div>
+      </div>
+
+      <form id="calculator-form">
+        
+        <!-- Step 1: Transportation -->
+        <div class="calculator-step active" data-step="1">
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-car"></i> Transportation</h3>
+          
+          <div class="form-group">
+            <label>How do you primarily commute?</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="transportType" value="car_petrol" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-car-side"></i>
+                  <span class="radio-tile-label">Petrol/Diesel Car</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="transportType" value="car_electric">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span class="radio-tile-label">Electric Car</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="transportType" value="public">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-train-subway"></i>
+                  <span class="radio-tile-label">Public Transit</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="transportType" value="active">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-bicycle"></i>
+                  <span class="radio-tile-label">Bicycle / Walk</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="transportDist">Approx. distance traveled per week (km):</label>
+            <div class="range-slider-container">
+              <input type="range" id="transportDist" name="transportDist" min="0" max="800" value="150">
+              <span class="slider-val" id="transportDistVal">150 km</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="flights">Flights taken per year (hours of flight time):</label>
+            <div class="range-slider-container">
+              <input type="range" id="flights" name="flights" min="0" max="60" value="4">
+              <span class="slider-val" id="flightsVal">4 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Energy & Utilities -->
+        <div class="calculator-step" data-step="2">
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-plug"></i> Home Energy</h3>
+          
+          <div class="form-group">
+            <label for="electricity">Monthly electricity bill ($):</label>
+            <div class="range-slider-container">
+              <input type="range" id="electricity" name="electricity" min="0" max="300" value="60">
+              <span class="slider-val" id="electricityVal">$60</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Do you use clean/renewable energy sources?</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="renewable" value="none" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-tower-broadcast"></i>
+                  <span class="radio-tile-label">Standard Grid</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="renewable" value="partial">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-circle-half-stroke"></i>
+                  <span class="radio-tile-label">Partial Green</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="renewable" value="full">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-sun"></i>
+                  <span class="radio-tile-label">100% Solar/Wind</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Diet & Food -->
+        <div class="calculator-step" data-step="3">
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-utensils"></i> Diet & Consumption</h3>
+          
+          <div class="form-group">
+            <label>Which best describes your diet?</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="diet" value="meat_heavy" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-drumstick-bite"></i>
+                  <span class="radio-tile-label">Meat Lover</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="diet" value="balanced">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-egg"></i>
+                  <span class="radio-tile-label">Balanced / Flexi</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="diet" value="vegetarian">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-cheese"></i>
+                  <span class="radio-tile-label">Vegetarian</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="diet" value="vegan">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-carrot"></i>
+                  <span class="radio-tile-label">Vegan</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="foodWaste">How much food does your household waste?</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="foodWaste" value="high">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-trash-can"></i>
+                  <span class="radio-tile-label">Significant</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="foodWaste" value="moderate" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-scale-unbalanced-stroke"></i>
+                  <span class="radio-tile-label">Average</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="foodWaste" value="minimal">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span class="radio-tile-label">Almost None</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Spending & Waste -->
+        <div class="calculator-step" data-step="4">
+          <h3 style="margin-bottom: 1.25rem;" class="font-outfit"><i class="fa-solid fa-bag-shopping"></i> Shopping & Habits</h3>
+          
+          <div class="form-group">
+            <label for="shopping">Monthly shopping on new products (clothes, gadgets, decor):</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="shopping" value="high">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  <span class="radio-tile-label">High spender</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="shopping" value="moderate" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-bag-shopping"></i>
+                  <span class="radio-tile-label">Average</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="shopping" value="minimal">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-tag"></i>
+                  <span class="radio-tile-label">Minimalist</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Do you actively recycle paper, plastic, and glass?</label>
+            <div class="radio-tile-group">
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="recycle" value="no">
+                <div class="radio-tile">
+                  <i class="fa-solid fa-xmark"></i>
+                  <span class="radio-tile-label">No / Rarely</span>
+                </div>
+              </div>
+              <div class="radio-tile-wrapper">
+                <input type="radio" class="radio-tile-input" name="recycle" value="yes" checked>
+                <div class="radio-tile">
+                  <i class="fa-solid fa-check"></i>
+                  <span class="radio-tile-label">Regularly</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-nav-buttons">
+          <button type="button" class="btn btn-secondary" id="prev-step-btn" style="visibility: hidden;">Back</button>
+          <button type="button" class="btn" id="next-step-btn">Next</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
